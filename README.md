@@ -1,8 +1,6 @@
 # 🦋 Meeting scheduling microservice
 This project consists of a small microservice that will have a client and server side when registering for a meetup.
 
----
-
 ## 💻 Technologies used
 
 - Java 11
@@ -11,8 +9,6 @@ This project consists of a small microservice that will have a client and server
 - JPA
 - TDD (Test Driven Development)
 - Azure functions
-
----
 
 ## 👩‍💻 TODO list
 
