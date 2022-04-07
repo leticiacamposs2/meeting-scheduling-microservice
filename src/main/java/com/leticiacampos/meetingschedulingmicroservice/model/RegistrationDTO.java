@@ -14,13 +14,13 @@ import java.time.LocalDate;
 @Builder
 public class RegistrationDTO {
 
-    private long id;
+    private Integer id;
 
     @NotEmpty
     private String name;
 
     @NotEmpty
-    private LocalDate dateOfRegistration;
+    private String dateOfRegistration;
 
     @NotEmpty
     private String registration;
