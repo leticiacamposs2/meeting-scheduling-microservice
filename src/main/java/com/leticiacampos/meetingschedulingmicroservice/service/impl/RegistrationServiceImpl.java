@@ -26,31 +26,8 @@ public class RegistrationServiceImpl implements RegistrationService {
         return repository.save(registration);
     }
 
-
     @Override
     public Optional<Registration> getRegistrationById(Integer id) {
-        return Optional.empty();
-    }
-
-    // inserir mais uma validacao no delete();
-    @Override
-    public void delete(Registration registration) {
-
-    }
-
-    // inserir mais uma validacao no save();
-    @Override
-    public Registration update(Registration registration) {
-        return null;
-    }
-
-    @Override
-    public Page<Registration> find(Registration filter, Pageable pageRequest) {
-        return null;
-    }
-
-    @Override
-    public Optional<Registration> getRegistrationByRegistrationAttribute(String registrationAttribute) {
-        return Optional.empty();
+        return this.repository.findById(id);
     }
 }

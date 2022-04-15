@@ -12,11 +12,4 @@ public interface RegistrationService {
 
     Optional<Registration> getRegistrationById(Integer id);
 
-    void delete(Registration registration);
-
-    Registration update(Registration registration);
-
-    Page<Registration> find(Registration filter, Pageable pageRequest);
-
-    Optional<Registration> getRegistrationByRegistrationAttribute(String registrationAttribute);
 }

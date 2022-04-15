@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,18 +65,39 @@ public class RegistrationServiceTest {
 
     @Test
     @DisplayName("Should throw business error when try to save a new registration with a registration duplicated")
-        public void shouldNotSaveAsRegistrationDuplicated() {
+    public void shouldNotSaveAsRegistrationDuplicated() {
 
-            Registration registration = createValidRegistration();
+        Registration registration = createValidRegistration();
 
-            Mockito.when(repository.existsByRegistration(Mockito.any())).thenReturn(true);
+        Mockito.when(repository.existsByRegistration(Mockito.any())).thenReturn(true);
 
-            Throwable exception = Assertions.catchThrowable(() -> registrationService.save(registration));
+        Throwable exception = Assertions.catchThrowable(() -> registrationService.save(registration));
 
-            assertThat(exception)
-                    .isInstanceOf(BusinessException.class)
-                    .hasMessage("Registration already created");
+        assertThat(exception)
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("Registration already created");
 
-            Mockito.verify(repository, Mockito.never()).save(registration);
-        }
+        Mockito.verify(repository, Mockito.never()).save(registration);
+    }
+
+    @Test
+    @DisplayName("Should get an Registration by id")
+    public void getByRegistrationId() {
+
+        //cenário
+        Integer id = 11;
+        Registration registration = createValidRegistration();
+        registration.setId(id);
+        Mockito.when(repository.findById(id)).thenReturn(Optional.of(registration));
+
+        //execução
+        Optional<Registration> foundRegistration = registrationService.getRegistrationById(id);
+
+        assertThat(foundRegistration.isPresent()).isTrue();
+        assertThat(foundRegistration.get().getId()).isEqualTo(id);
+        assertThat(foundRegistration.get().getName()).isEqualTo(registration.getName());
+        assertThat(foundRegistration.get().getDateOfRegistration()).isEqualTo(registration.getDateOfRegistration());
+        assertThat(foundRegistration.get().getRegistration()).isEqualTo(registration.getRegistration());
+    }
+
 }
