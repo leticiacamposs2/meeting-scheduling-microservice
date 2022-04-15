@@ -1,4 +1,4 @@
-package com.leticiacampos.meetingschedulingmicroservice.model;
+package com.leticiacampos.meetingschedulingmicroservice.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
-public @Data @AllArgsConstructor @NoArgsConstructor @Builder
-class RegistrationDTO {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class RegistrationDTO {
 
     private Integer id;
 

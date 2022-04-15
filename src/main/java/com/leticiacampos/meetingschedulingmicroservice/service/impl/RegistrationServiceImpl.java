@@ -4,8 +4,7 @@ import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessExcepti
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.RegistrationRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -27,16 +26,19 @@ public class RegistrationServiceImpl implements RegistrationService {
         return repository.save(registration);
     }
 
+
     @Override
     public Optional<Registration> getRegistrationById(Integer id) {
         return Optional.empty();
     }
 
+    // inserir mais uma validacao no delete();
     @Override
     public void delete(Registration registration) {
 
     }
 
+    // inserir mais uma validacao no save();
     @Override
     public Registration update(Registration registration) {
         return null;
