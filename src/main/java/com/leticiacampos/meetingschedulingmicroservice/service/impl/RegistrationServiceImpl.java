@@ -4,7 +4,6 @@ import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessExcepti
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.RegistrationRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
