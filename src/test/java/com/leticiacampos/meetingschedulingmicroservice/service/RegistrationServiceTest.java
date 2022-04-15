@@ -1,12 +1,15 @@
 package com.leticiacampos.meetingschedulingmicroservice.service;
 
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.RegistrationRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.impl.RegistrationServiceImpl;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
@@ -59,4 +62,20 @@ public class RegistrationServiceTest {
                 .build();
     }
 
+    @Test
+    @DisplayName("Should throw business error when try to save a new registration with a registration duplicated")
+        public void shouldNotSaveAsRegistrationDuplicated() {
+
+            Registration registration = createValidRegistration();
+
+            Mockito.when(repository.existsByRegistration(Mockito.any())).thenReturn(true);
+
+            Throwable exception = Assertions.catchThrowable(() -> registrationService.save(registration));
+
+            assertThat(exception)
+                    .isInstanceOf(BusinessException.class)
+                    .hasMessage("Registration already created");
+
+            Mockito.verify(repository, Mockito.never()).save(registration);
+        }
 }

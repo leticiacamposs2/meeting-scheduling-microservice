@@ -7,8 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 
-public @Data @AllArgsConstructor @NoArgsConstructor @Builder
-class RegistrationDTO {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class RegistrationDTO {
 
     private Integer id;
 
