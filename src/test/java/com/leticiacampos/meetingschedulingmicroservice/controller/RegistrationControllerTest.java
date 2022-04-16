@@ -1,5 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.RegistrationDTO;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;import org.hamcrest.Matchers;
@@ -123,6 +124,28 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("name").value(createNewRegistration().getName()))
                 .andExpect(jsonPath("dateOfRegistration").value(createNewRegistration().getDateOfRegistration()))
                 .andExpect(jsonPath("registration").value(createNewRegistration().getRegistration()));
+    }
+
+    @Test
+    @DisplayName("Should throw an exception when try to create a new registration with an registration already created.")
+    public void createRegistrationWithDuplicatedRegistration() throws Exception {
+
+        RegistrationDTO dto = createNewRegistration();
+        String json  = new ObjectMapper().writeValueAsString(dto);
+
+        BDDMockito.given(registrationService.save(any(Registration.class)))
+                .willThrow(new BusinessException("Registration already created"));
+
+        MockHttpServletRequestBuilder request  = MockMvcRequestBuilders
+                .post(REGISTRATION_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value("Registration already created!"));
     }
 
     private RegistrationDTO createNewRegistration() {
