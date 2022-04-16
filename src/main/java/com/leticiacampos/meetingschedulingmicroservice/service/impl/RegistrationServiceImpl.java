@@ -37,4 +37,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
         this.repository.delete(registration); //delete vem do JPA
     }
+
+    @Override
+    public Registration update(Registration registration) {
+        if (registration == null || registration.getId() == null) {
+            throw new IllegalArgumentException("Registration id cannot be null");
+        }
+        return this.repository.save(registration); //save vem do JPA
+    }
 }
