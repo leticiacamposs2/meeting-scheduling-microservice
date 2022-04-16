@@ -53,15 +53,6 @@ public class RegistrationServiceTest {
         assertThat(savedRegistration.getRegistration()).isEqualTo("001");
     }
 
-    private Registration createValidRegistration() {
-        return Registration.builder()
-                .id(101)
-                .name("Leticia Campos")
-                .dateOfRegistration(LocalDate.now())
-                .registration("001")
-                .build();
-    }
-
     @Test
     @DisplayName("Should throw business error when try to save a new registration with a registration duplicated")
     public void shouldNotSaveAsRegistrationDuplicated() {
@@ -97,6 +88,27 @@ public class RegistrationServiceTest {
         assertThat(foundRegistration.get().getName()).isEqualTo(registration.getName());
         assertThat(foundRegistration.get().getDateOfRegistration()).isEqualTo(registration.getDateOfRegistration());
         assertThat(foundRegistration.get().getRegistration()).isEqualTo(registration.getRegistration());
+    }
+
+    @Test
+    @DisplayName("Should return empty when get an registration by id when doesn't exists")
+    public void registrationNotFoundByIdTest() {
+
+        Integer id = 11;
+        Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
+
+        Optional<Registration> registration = registrationService.getRegistrationById(id);
+
+        assertThat(registration.isPresent()).isFalse();
+    }
+
+    private Registration createValidRegistration() {
+        return Registration.builder()
+                .id(101)
+                .name("Leticia Campos")
+                .dateOfRegistration(LocalDate.now())
+                .registration("001")
+                .build();
     }
 
 }
