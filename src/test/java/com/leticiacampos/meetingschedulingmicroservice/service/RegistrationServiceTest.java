@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -100,6 +101,17 @@ public class RegistrationServiceTest {
         Optional<Registration> registration = registrationService.getRegistrationById(id);
 
         assertThat(registration.isPresent()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Should delete an student")
+    public void deleteRegistrationTest() {
+
+        Registration registration = Registration.builder().id(11).build();
+
+        assertDoesNotThrow(() -> registrationService.delete(registration));
+
+        Mockito.verify(repository, Mockito.times(1)).delete(registration);
     }
 
     private Registration createValidRegistration() {
