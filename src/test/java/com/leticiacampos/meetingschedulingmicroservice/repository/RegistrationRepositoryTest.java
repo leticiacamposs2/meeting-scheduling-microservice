@@ -62,6 +62,17 @@ public class RegistrationRepositoryTest {
         assertThat(foundRegistration.isPresent()).isTrue();
     }
 
+    @Test
+    @DisplayName("Should save an registration")
+    public void saveRegistrationTest() {
+
+        Registration registration_Class_attribute = createNewRegistration("323");
+
+        Registration savedRegistration = repository.save(registration_Class_attribute);
+
+        assertThat(savedRegistration.getId()).isNotNull();
+    }
+
     private Registration createNewRegistration(String registration) {
         return Registration.builder()
                 .name("Leticia Campos")
