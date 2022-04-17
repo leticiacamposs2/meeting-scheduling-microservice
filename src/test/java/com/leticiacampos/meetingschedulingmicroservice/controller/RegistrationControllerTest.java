@@ -140,6 +140,20 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("errors[0]").value("Registration already created!"));
     }
 
+    @Test
+    @DisplayName("Should return NOT FOUND when the registration doesn't exists")
+    public void registrationNotFoundTest() throws Exception {
+
+        BDDMockito.given(registrationService.getRegistrationById(anyInt())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(REGISTRATION_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNotFound());
+    }
+
     private RegistrationDTO createNewRegistration() {
         return RegistrationDTO.builder()
                 .id(101)
