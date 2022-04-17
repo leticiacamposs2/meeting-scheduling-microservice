@@ -73,6 +73,23 @@ public class RegistrationRepositoryTest {
         assertThat(savedRegistration.getId()).isNotNull();
     }
 
+    @Test
+    @DisplayName("Should delete and registration from the base")
+    public void deleteRegistration() {
+
+        Registration registration_Class_attribute = createNewRegistration("323");
+        entityManager.persist(registration_Class_attribute);
+
+        Registration foundRegistration = entityManager
+                .find(Registration.class, registration_Class_attribute.getId());
+        repository.delete(foundRegistration);
+
+        Registration deleteRegistration = entityManager
+                .find(Registration.class, registration_Class_attribute.getId());
+
+        assertThat(deleteRegistration).isNull();
+    }
+
     private Registration createNewRegistration(String registration) {
         return Registration.builder()
                 .name("Leticia Campos")
