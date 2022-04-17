@@ -186,6 +186,50 @@ public class RegistrationControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("Should update registration info")
+    public void updateRegistrationTest() throws Exception {
+
+        Integer id = 11;
+        String json = new ObjectMapper().writeValueAsString(createNewRegistration());
+
+        Registration updatingRegistration = Registration
+                .builder()
+                .id(id)
+                .name("Julie Steve")
+                .dateOfRegistration("17/04/2022")
+                .registration("323")
+                .build();
+
+        BDDMockito.given(registrationService.getRegistrationById(anyInt()))
+                .willReturn(Optional.of(updatingRegistration));
+
+        Registration updatedRegistration = Registration
+                .builder()
+                .id(id)
+                .name("Leticia Campos")
+                .dateOfRegistration("16/04/2022")
+                .registration("323")
+                .build();
+
+        BDDMockito.given(registrationService.update(updatingRegistration))
+                .willReturn((updatedRegistration));
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put(REGISTRATION_API.concat("/" + 1))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc
+                .perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("name").value(createNewRegistration().getName()))
+                .andExpect(jsonPath("dateOfRegistration").value(createNewRegistration().getDateOfRegistration()))
+                .andExpect(jsonPath("registration").value("323"));
+    }
+
     private RegistrationDTO createNewRegistration() {
         return RegistrationDTO.builder()
                 .id(101)
