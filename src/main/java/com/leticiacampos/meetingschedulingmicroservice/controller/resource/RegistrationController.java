@@ -1,6 +1,6 @@
-package com.leticiacampos.meetingschedulingmicroservice.controller;
+package com.leticiacampos.meetingschedulingmicroservice.controller.resource;
 
-import com.leticiacampos.meetingschedulingmicroservice.model.RegistrationDTO;
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
 import org.modelmapper.ModelMapper;

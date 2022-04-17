@@ -1,4 +1,4 @@
-package com.leticiacampos.meetingschedulingmicroservice.model;
+package com.leticiacampos.meetingschedulingmicroservice.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

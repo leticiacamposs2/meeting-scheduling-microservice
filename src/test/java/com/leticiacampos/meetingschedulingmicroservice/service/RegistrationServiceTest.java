@@ -1,6 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.service;
 
-import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.RegistrationRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.impl.RegistrationServiceImpl;
