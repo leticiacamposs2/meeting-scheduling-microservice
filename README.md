@@ -12,10 +12,10 @@ This project consists of a small microservice that will have a client and server
 
 ## 👩‍💻 TODO list
 
-- [ ] Implementation of the se service class;
-- [ ] Tests in service;
-- [ ] Web control class implementation;
-- [ ] Contract tests in the controller;
+- [x] Implementation of the se service class;
+- [x] Tests in service;
+- [x] Web control class implementation;
+- [x] Contract tests in the controller;
 - [ ] Unit tests in the repository;
 - [ ] Repository implementation;
 - [ ] Swagger;

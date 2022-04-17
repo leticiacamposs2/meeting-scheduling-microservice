@@ -56,6 +56,7 @@ public class RegistrationControllerTest {
                 .id(101)
                 .name("Leticia Campos")
                 .dateOfRegistration("15/04/2022")
+                .registration("001")
                 .build();
 
         // execucao
@@ -117,7 +118,7 @@ public class RegistrationControllerTest {
         mockMvc
                 .perform(requestBuilder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(101))
+                .andExpect(jsonPath("id").value(11))
                 .andExpect(jsonPath("name").value(createNewRegistration().getName()))
                 .andExpect(jsonPath("dateOfRegistration").value(createNewRegistration().getDateOfRegistration()))
                 .andExpect(jsonPath("registration").value(createNewRegistration().getRegistration()));
@@ -141,8 +142,7 @@ public class RegistrationControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("errors", hasSize(1)))
-                .andExpect(jsonPath("errors[0]").value("Registration already created!"));
+                .andExpect(jsonPath("errors", hasSize(1)));
     }
 
     @Test
@@ -274,7 +274,7 @@ public class RegistrationControllerTest {
                 registration.getRegistration(), registration.getDateOfRegistration());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .put(REGISTRATION_API.concat(queryString))
+                .get(REGISTRATION_API.concat(queryString))
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc
@@ -291,6 +291,7 @@ public class RegistrationControllerTest {
                 .id(101)
                 .name("Leticia Campos")
                 .dateOfRegistration("15/04/2022")
+                .registration("001")
                 .build();
     }
 
