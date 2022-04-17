@@ -230,6 +230,26 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("registration").value("323"));
     }
 
+    @Test
+    @DisplayName("Should return 404 when try to update an registration no existent")
+    public void updateNonExistentRegistrationTest() throws Exception {
+
+        String json  = new ObjectMapper().writeValueAsString(createNewRegistration());
+
+        BDDMockito.given(registrationService.getRegistrationById(anyInt()))
+                .willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put(REGISTRATION_API.concat("/" + 1))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc
+                .perform(requestBuilder)
+                .andExpect(status().isNotFound());
+    }
+
     private RegistrationDTO createNewRegistration() {
         return RegistrationDTO.builder()
                 .id(101)
