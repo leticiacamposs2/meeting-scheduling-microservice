@@ -144,7 +144,8 @@ public class RegistrationControllerTest {
     @DisplayName("Should return NOT FOUND when the registration doesn't exists")
     public void registrationNotFoundTest() throws Exception {
 
-        BDDMockito.given(registrationService.getRegistrationById(anyInt())).willReturn(Optional.empty());
+        BDDMockito.given(registrationService.getRegistrationById(anyInt()))
+                .willReturn(Optional.empty());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get(REGISTRATION_API.concat("/" + 1))
@@ -168,6 +169,21 @@ public class RegistrationControllerTest {
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Should return resource not found when no registration is found to delete")
+    public void deleteNonExistentRegistrationTest() throws Exception {
+
+        BDDMockito.given(registrationService.getRegistrationById(anyInt()))
+                .willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete(REGISTRATION_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNotFound());
     }
 
     private RegistrationDTO createNewRegistration() {
