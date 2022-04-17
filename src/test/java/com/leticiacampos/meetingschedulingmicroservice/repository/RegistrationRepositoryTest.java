@@ -26,6 +26,7 @@ public class RegistrationRepositoryTest {
     @Test
     @DisplayName("Should return true when exists an registration already created.")
     public void returnTrueWhenRegistrationExists() {
+
         String registration = "123";
         Registration registration_attributte = createNewRegistration(registration);
         entityManager.persist(registration_attributte);
@@ -33,6 +34,17 @@ public class RegistrationRepositoryTest {
         boolean exists = repository.existsByRegistration(registration);
 
         assertThat(exists).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should return false when doesn't exists an registration_attribute with a registration already created.")
+    public void returnFalseWhenRegistrationAttributeDoesntExists() {
+
+        String registration = "123";
+
+        boolean exists = repository.existsByRegistration(registration);
+
+        assertThat(exists).isFalse();
     }
 
     private Registration createNewRegistration(String registration) {
