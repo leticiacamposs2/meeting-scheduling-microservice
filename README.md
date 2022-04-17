@@ -21,3 +21,17 @@ This project consists of a small microservice that will have a client and server
 - [ ] Swagger;
 - [ ] Local tests via postman;
 - [ ] Deploy on Azure;
+
+## Tests
+
+### Service
+
+![registration-service-test](https://user-images.githubusercontent.com/34458509/163734898-61c0b6c6-9cf4-4b5d-a810-bafef9b3424b.png)
+
+### Controller
+
+![registration-controller-test](https://user-images.githubusercontent.com/34458509/163734826-aad028b9-1dd6-42e6-a3bc-b83f7ae1bd2f.png)
+
+### Repository
+
+![registration-repository-test](https://user-images.githubusercontent.com/34458509/163735374-f7d9e80e-87ac-4679-97c9-87bff3c01898.png)
