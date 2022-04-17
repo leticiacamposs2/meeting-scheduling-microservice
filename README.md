@@ -1,8 +1,6 @@
 # 🦋 Meeting scheduling microservice
 This project consists of a small microservice that will have a client and server side when registering for a meetup.
 
-https://user-images.githubusercontent.com/42419543/162650128-1f8ab89f-0235-40a4-ad57-e60741ebf2ec.mp4
-
 ## 💻 Technologies used
 
 - Java 11
