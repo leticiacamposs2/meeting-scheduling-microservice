@@ -42,4 +42,11 @@ public class RegistrationController {
                 .map(registration -> modelMapper.map(registration, RegistrationDTO.class))
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteByRegistrationId(@PathVariable Integer id) {
+        Registration registration = registrationService.getRegistrationById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        registrationService.delete(registration);
+    }
 }

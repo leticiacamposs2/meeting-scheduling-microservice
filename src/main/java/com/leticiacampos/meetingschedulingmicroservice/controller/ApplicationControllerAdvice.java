@@ -18,7 +18,6 @@ public class ApplicationControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleValidateException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
-
         return new ApiErrors(bindingResult);
     }
 

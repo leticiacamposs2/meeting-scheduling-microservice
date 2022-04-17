@@ -154,6 +154,22 @@ public class RegistrationControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    @DisplayName("Should delete the registration")
+    public void deleteRegistration() throws Exception {
+
+        BDDMockito.given(registrationService
+                .getRegistrationById(anyInt()))
+                .willReturn(Optional.of(Registration.builder().id(11).build()));
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete(REGISTRATION_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNoContent());
+    }
+
     private RegistrationDTO createNewRegistration() {
         return RegistrationDTO.builder()
                 .id(101)
