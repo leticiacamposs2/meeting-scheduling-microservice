@@ -197,7 +197,7 @@ public class RegistrationControllerTest {
                 .builder()
                 .id(id)
                 .name("Julie Steve")
-                .dateOfRegistration("17/04/2022")
+                .dateOfRegistration("15/04/2022")
                 .registration("323")
                 .build();
 
@@ -208,7 +208,7 @@ public class RegistrationControllerTest {
                 .builder()
                 .id(id)
                 .name("Leticia Campos")
-                .dateOfRegistration("16/04/2022")
+                .dateOfRegistration("15/04/2022")
                 .registration("323")
                 .build();
 
