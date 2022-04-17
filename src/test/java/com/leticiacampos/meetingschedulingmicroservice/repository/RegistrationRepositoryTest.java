@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -45,6 +47,19 @@ public class RegistrationRepositoryTest {
         boolean exists = repository.existsByRegistration(registration);
 
         assertThat(exists).isFalse();
+    }
+
+    @Test
+    @DisplayName("Should get an registration by id")
+    public void findByIdTest() {
+
+        Registration registration_Class_attribute = createNewRegistration("323");
+        entityManager.persist(registration_Class_attribute);
+
+        Optional<Registration> foundRegistration = repository
+                .findById(registration_Class_attribute.getId());
+
+        assertThat(foundRegistration.isPresent()).isTrue();
     }
 
     private Registration createNewRegistration(String registration) {
