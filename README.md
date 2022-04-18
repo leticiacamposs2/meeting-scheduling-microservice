@@ -17,7 +17,7 @@ This project consists of a small microservice that will have a client and server
 - [x] Web control class implementation;
 - [x] Contract tests in the controller;
 - [x] Unit tests in the repository;
-- [x] Repository implementation;
+- [x] Repository implementation; 
 - [ ] Swagger;
 - [ ] Local tests via postman;
 - [ ] Deploy on Azure;
@@ -30,7 +30,13 @@ This project consists of a small microservice that will have a client and server
 
 ### Controller
 
+#### Registration
+
 ![registration-controller-test](https://user-images.githubusercontent.com/34458509/163734826-aad028b9-1dd6-42e6-a3bc-b83f7ae1bd2f.png)
+
+#### Meetup
+
+![meetup-controller-test](https://user-images.githubusercontent.com/34458509/163737343-9dfc220d-b2e8-4f62-83f5-2ed65d4848ca.png)
 
 ### Repository
 
