@@ -44,6 +44,29 @@ public class MeetupControllerTest {
 
     @MockBean
     RegistrationService registrationService;
+
+    @Test
+    @DisplayName("Should return error when try to register a meetup nonexistent")
+    public void invalidRegistrationCreateMeetupTest() throws Exception {
+
+        MeetupDTO dto = MeetupDTO.builder()
+                .registrationAttribute("123")
+                .event("Womakerscode Dados")
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        BDDMockito.given(registrationService.getRegistrationByRegistrationAttribute("123"))
+                .willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(MEETUP_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
     
     @Test
     @DisplayName("Should return error when try to register a registration already register on a meetup")
