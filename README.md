@@ -22,9 +22,7 @@ This project consists of a small microservice that will have a client and server
 - [ ] Local tests via postman;
 - [ ] Deploy on Azure;
 
-## 👩‍💻 TODO list challenge
-
-Camada Meetup
+#### Camada Meetup
 
 - [ ] Testes do repository
 - [ ] Testes do controller
