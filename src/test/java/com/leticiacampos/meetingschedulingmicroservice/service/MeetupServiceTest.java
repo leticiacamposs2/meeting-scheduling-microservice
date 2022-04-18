@@ -8,14 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.awt.print.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,34 +37,37 @@ public class MeetupServiceTest {
     @DisplayName("Should save an meetup")
     public void saveMeetup() {
 
-        Integer id = 11;
+        Registration registration = Registration.builder()
+                .id(11)
+                .build();
 
         // cenário
-        Registration registration = Registration.builder()
-                .id(id)
-                .build();
+        Meetup meetup = createValidMeetup(registration);
 
-        Meetup savingMeetup = Meetup.builder()
-                .event("Data Storytelling – O poder de contar histórias com dados")
-                .registration(registration)
-                .meetupDate("17/04/2022")
-                .build();
-
-        Meetup savedMeetup = Meetup.builder()
-                .id(id)
-                .event("Data Storytelling – O poder de contar histórias com dados")
-                .registration(registration)
-                .meetupDate("17/04/2022")
-                .build();
+        ArgumentCaptor<Pageable> pageableCaptor = ArgumentCaptor.forClass(Pageable.class);
+        PageRequest pageable = (PageRequest) pageableCaptor.getValue();
 
         // execução
-        Mockito.when(repository.save(savingMeetup)).thenReturn(savedMeetup);
+        //Mockito.when(repository.findByRegistrationOnMeetup("101", "Data Storytelling – O poder de contar histórias com dados", pageable)).thenReturn(false);
+        //Mockito.when(repository.findByRegistration(registration, pageable)).thenReturn(meetup);
+
+        Meetup savedMeetup = meetupService.save(meetup);
 
         // assert
         assertThat(savedMeetup.getId()).isEqualTo(11);
         assertThat(savedMeetup.getEvent()).isEqualTo("Data Storytelling – O poder de contar histórias com dados");
         assertThat(savedMeetup.getRegistration()).isEqualTo(registration);
         assertThat(savedMeetup.getMeetupDate()).isEqualTo("17/04/2022");
+        
+    }
+
+    private Meetup createValidMeetup(Registration registration) {
+        return Meetup.builder()
+                .id(101)
+                .event("Data Storytelling – O poder de contar histórias com dados")
+                .registration(registration)
+                .meetupDate("17/04/2022")
+                .build();
     }
 
 }
