@@ -18,7 +18,7 @@ This project consists of a small microservice that will have a client and server
 - [x] Contract tests in the controller;
 - [x] Unit tests in the repository;
 - [x] Repository implementation; 
-- [ ] Swagger;
+- [x] Swagger;
 - [ ] Local tests via postman;
 - [ ] Deploy on Azure;
 
