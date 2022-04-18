@@ -17,5 +17,12 @@ public interface MeetupRepository extends JpaRepository<Meetup, Integer> {
             Pageable pageable
     );
 
+    //    @Query( value = " select case when ( (cont(l.id) >0)) then true else false end from Meetup l where l.event = :event and (l. registered is null l. registered is false) ")
+    //    Page<Meetup> findByRegistrationOnMeetup(
+    //            @Param("registration") String registration,
+    //            @Param("event") String event,
+    //            Pageable pageable
+    //    );
+
     Page<Meetup> findByRegistration(Registration registration, Pageable pageable );
 }
