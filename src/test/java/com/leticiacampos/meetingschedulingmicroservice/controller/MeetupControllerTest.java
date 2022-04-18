@@ -26,6 +26,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -44,6 +45,47 @@ public class MeetupControllerTest {
 
     @MockBean
     RegistrationService registrationService;
+
+    @Test
+    @DisplayName("Should register on a meetup")
+    public void createMeetupTest() throws Exception {
+
+        // quando enviar uma requisição pra esse registration precisa ser encontrado um valor que tem esse usuário
+        MeetupDTO dto = MeetupDTO.builder()
+                .registrationAttribute("123")
+                .event("Womakerscode Dados")
+                .build();
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        Registration registration = Registration.builder()
+                .id(11)
+                .registration("123")
+                .build();
+
+        BDDMockito.given(registrationService.getRegistrationByRegistrationAttribute("123"))
+                .willReturn(Optional.of(registration));
+
+        Meetup meetup = Meetup.builder()
+                .id(11)
+                .event("Womakerscode Dados")
+                .registration(registration)
+                .meetupDate("17/04/2022")
+                .build();
+
+        BDDMockito.given(meetupService.save(Mockito.any(Meetup.class)))
+                .willReturn(meetup);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(MEETUP_API)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        // Aqui o que retorna é o id do registro no meetup
+        mockMvc.perform(request)
+                .andExpect(status().isCreated())
+                .andExpect(content().string("11"));
+    }
 
     @Test
     @DisplayName("Should return error when try to register a meetup nonexistent")
@@ -67,7 +109,7 @@ public class MeetupControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().isBadRequest());
     }
-    
+
     @Test
     @DisplayName("Should return error when try to register a registration already register on a meetup")
     public void meetupRegistrationErrorOnCreateMeetupTest() throws Exception {
