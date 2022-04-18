@@ -24,9 +24,9 @@ This project consists of a small microservice that will have a client and server
 
 #### Camada Meetup
 
-- [ ] Testes do repository
-- [ ] Testes do controller
-- [ ] Testes do service
+- [ ] Tests in repository;
+- [ ] Tests in controller;
+- [ ] Tests in service;
 
 ## 🧪 Tests
 
