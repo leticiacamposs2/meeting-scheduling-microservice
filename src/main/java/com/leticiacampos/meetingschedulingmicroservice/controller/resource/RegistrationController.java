@@ -56,7 +56,7 @@ public class RegistrationController {
     }
 
     @PutMapping("{id}")
-    public RegistrationDTO update(@PathVariable Integer id, RegistrationDTO registrationDTO) {
+    public RegistrationDTO update(@PathVariable Integer id, @RequestBody RegistrationDTO registrationDTO) {
         return registrationService.getRegistrationById(id)
                 .map(registration -> {
                     registration.setName(registrationDTO.getName());
