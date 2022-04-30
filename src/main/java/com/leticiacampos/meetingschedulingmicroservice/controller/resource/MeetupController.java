@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,15 +24,6 @@ public class MeetupController {
 
     private final MeetupService meetupService;
     private final ModelMapper modelMapper;
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    private MeetupDTO create(@RequestBody MeetupDTO meetupDTO) {
-        Meetup entity = modelMapper.map(meetupDTO, Meetup.class);
-        entity = meetupService.save(entity);
-
-        return modelMapper.map(entity, MeetupDTO.class);
-    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -53,6 +46,25 @@ public class MeetupController {
                 .getById(id)
                 .map(meetup -> modelMapper.map(meetup, MeetupDTO.class))
                 .orElseThrow(() -> new BusinessException("The meetup with the given id could not be found."));
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    private MeetupDTO create(@RequestBody @Valid MeetupDTO meetupDTO) {
+        Meetup entity = modelMapper.map(meetupDTO, Meetup.class);
+        entity = meetupService.save(entity);
+
+        return modelMapper.map(entity, MeetupDTO.class);
+    }
+
+    @PutMapping("{id}")
+    public MeetupDTO update(@PathVariable Integer id, @RequestBody MeetupDTO meetupDTO) {
+        return meetupService.getById(id)
+                .map(meetup -> {
+                    meetup.setEvent(meetupDTO.getEvent());
+                    meetup = meetupService.update(meetup);
+                    return modelMapper.map(meetup, MeetupDTO.class);
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("{id}")
