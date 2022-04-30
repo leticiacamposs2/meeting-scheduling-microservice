@@ -1,6 +1,7 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller.resource;
 
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
+import com.leticiacampos.meetingschedulingmicroservice.exceptions.MeetupNotFoundException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
@@ -46,4 +47,14 @@ public class MeetupController {
         return new PageImpl<MeetupDTO>(list, pageRequest, result.getTotalElements());
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public MeetupDTO get(@PathVariable Integer id) throws MeetupNotFoundException {
+        return meetupService
+                .getById(id)
+                .map(meetup -> modelMapper.map(meetup, MeetupDTO.class))
+                .orElseThrow(() -> new MeetupNotFoundException("The meetup with the given id could not be found."));
+    }
+
 }
+
