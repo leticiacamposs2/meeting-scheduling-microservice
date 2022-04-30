@@ -19,7 +19,7 @@ This project consists of a small microservice that will have a client and server
 - [x] Unit tests in the repository;
 - [x] Repository implementation; 
 - [x] Swagger;
-- [ ] Local tests via postman;
+- [x] Local tests via postman;
 - [ ] Deploy on Azure;
 
 #### Camada Meetup
