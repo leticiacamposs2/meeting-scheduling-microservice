@@ -30,19 +30,11 @@ public class MeetupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Integer create(@RequestBody MeetupDTO meetupDTO) {
-
-        Registration registration = registrationService.getRegistrationByRegistrationAttribute(meetupDTO.getRegistrationAttribute())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
-
-        Meetup entity = Meetup.builder()
-                .registration(registration)
-                .event(meetupDTO.getEvent())
-                .meetupDate("17/04/2022")
-                .build();
-
+    private MeetupDTO create(@RequestBody MeetupDTO meetupDTO) {
+        Meetup entity = modelMapper.map(meetupDTO, Meetup.class);
         entity = meetupService.save(entity);
-        return entity.getId();
+
+        return modelMapper.map(entity, MeetupDTO.class);
     }
 
     @GetMapping
