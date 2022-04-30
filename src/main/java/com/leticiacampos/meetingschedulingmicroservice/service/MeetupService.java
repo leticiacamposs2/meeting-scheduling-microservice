@@ -18,4 +18,6 @@ public interface MeetupService {
     Page<Meetup> find(Meetup filter, Pageable pageRequest);
 
     Page<Meetup> getRegistrationsByMeetup(Registration registration, Pageable pageable);
+
+    void delete(Integer id);
 }

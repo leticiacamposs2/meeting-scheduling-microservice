@@ -1,6 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.service.impl;
 
-import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupFilterDTO;
+import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.MeetupRepository;
@@ -51,6 +51,12 @@ public class MeetupServiceImpl implements MeetupService {
     @Override
     public Page<Meetup> getRegistrationsByMeetup(Registration registration, Pageable pageable) {
         return repository.findByRegistration(registration, pageable);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Integer result = repository.deleteMeetupById(id);
+        if (result == 0) throw new BusinessException("Unable to delete Meetup: " + id);
     }
 
 }

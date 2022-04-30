@@ -40,7 +40,7 @@ public class RegistrationController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RegistrationDTO get (@PathVariable Integer id) {
+    public RegistrationDTO get(@PathVariable Integer id) {
 
         return registrationService
                 .getRegistrationById(id)
@@ -51,7 +51,8 @@ public class RegistrationController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteByRegistrationId(@PathVariable Integer id) {
-        Registration registration = registrationService.getRegistrationById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Registration registration = registrationService.getRegistrationById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         registrationService.delete(registration);
     }
 

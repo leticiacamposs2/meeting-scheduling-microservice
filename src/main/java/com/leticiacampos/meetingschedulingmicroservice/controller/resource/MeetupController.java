@@ -1,7 +1,7 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller.resource;
 
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.MeetupNotFoundException;
+import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
 import lombok.RequiredArgsConstructor;
@@ -48,11 +48,17 @@ public class MeetupController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MeetupDTO get(@PathVariable Integer id) throws MeetupNotFoundException {
+    public MeetupDTO get(@PathVariable Integer id) throws BusinessException {
         return meetupService
                 .getById(id)
                 .map(meetup -> modelMapper.map(meetup, MeetupDTO.class))
-                .orElseThrow(() -> new MeetupNotFoundException("The meetup with the given id could not be found."));
+                .orElseThrow(() -> new BusinessException("The meetup with the given id could not be found."));
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        meetupService.delete(id);
     }
 
 }
