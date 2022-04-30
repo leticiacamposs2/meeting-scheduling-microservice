@@ -4,7 +4,6 @@ import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
 import com.leticiacampos.meetingschedulingmicroservice.exceptions.MeetupNotFoundException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
-import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import java.util.stream.Collectors;
 public class MeetupController {
 
     private final MeetupService meetupService;
-    private final RegistrationService registrationService;
     private final ModelMapper modelMapper;
 
     @PostMapping
@@ -35,6 +33,7 @@ public class MeetupController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public Page<MeetupDTO> find(MeetupDTO dto, Pageable pageRequest) {
         Meetup filter = modelMapper.map(dto, Meetup.class);
         Page<Meetup> result = meetupService.find(filter, pageRequest);
