@@ -23,7 +23,8 @@ This project consists of a small microservice that will have a client and server
 - [ ] Deploy on Azure;
 
 #### Camada Meetup
-
+- [ ] Create endpoint delete;
+- [ ] Create endpoint update (put);
 - [ ] Tests in repository;
 - [ ] Tests in controller;
 - [ ] Tests in service;
