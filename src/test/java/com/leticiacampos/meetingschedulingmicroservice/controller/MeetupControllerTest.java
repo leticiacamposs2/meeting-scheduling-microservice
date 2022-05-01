@@ -1,5 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
 import com.leticiacampos.meetingschedulingmicroservice.controller.resource.MeetupController;
 import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
@@ -8,6 +9,8 @@ import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -47,7 +51,6 @@ public class MeetupControllerTest {
     @DisplayName("Should register on a meetup")
     public void createMeetupTest() throws Exception {
 
-        // quando enviar uma requisicao pra esse registration precisa ser encontrado um valor que tem esse usuario
         MeetupDTO dto = MeetupDTO.builder()
                 .event("Womakerscode Dados")
                 .date("20/02/1991")
@@ -91,6 +94,7 @@ public class MeetupControllerTest {
                 .ownerId(1)
                 .registrations(null)
                 .build();
+
         String json = new ObjectMapper().writeValueAsString(dto);
 
         // procura na base se ja tem algum registration pra esse meetup
@@ -106,4 +110,39 @@ public class MeetupControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    @DisplayName("Should get an event by id with success")
+    public void getMeetupByIdTest() throws Exception {
+
+        Integer id = 1;
+
+        Meetup meetup = createNewMeetup();
+
+        BDDMockito.given(meetupService.getById(anyInt()))
+                .willReturn(Optional.of(meetup));
+
+        MockHttpServletRequestBuilder request  = MockMvcRequestBuilders
+                .get(MEETUP_API.concat("/" + id))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value(id))
+                .andExpect(jsonPath("event").value(createNewMeetup().getEvent()))
+                .andExpect(jsonPath("meetupDate").value(createNewMeetup().getMeetupDate()))
+                .andExpect(jsonPath("ownerId").value(createNewMeetup().getOwnerId()))
+                .andExpect(jsonPath("registrations").value(createNewMeetup().getRegistrations()));
+    }
+
+    private Meetup createNewMeetup() {
+        return Meetup.builder()
+                .event("Womakerscode Dados")
+                .meetupDate("20/02/1991")
+                .ownerId(1)
+                .registrations(null)
+                .build();
+    }
+
 }
