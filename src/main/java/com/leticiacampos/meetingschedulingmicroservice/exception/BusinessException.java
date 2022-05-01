@@ -1,4 +1,4 @@
-package com.leticiacampos.meetingschedulingmicroservice.exceptions;
+package com.leticiacampos.meetingschedulingmicroservice.exception;
 
 public class BusinessException extends RuntimeException {
     public BusinessException(String s) {

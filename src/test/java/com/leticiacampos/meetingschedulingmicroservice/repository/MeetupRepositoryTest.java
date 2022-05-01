@@ -35,38 +35,6 @@ public class MeetupRepositoryTest {
 
     private Registration registrationMock;
 
-    @BeforeEach
-    public void setup() {
-
-        meetupMock = Meetup.builder()
-                .id(123)
-                .event("Data Storytelling – O poder de contar histórias com dados")
-                .registration(createNewRegistration())
-                .meetupDate("17/04/2022")
-                .build();
-
-        registrationMock = Registration.builder()
-                .id(11)
-                .name("Leticia Campos")
-                .dateOfRegistration("17/04/2022")
-                .registration("323")
-                .build();
-    }
-
-    @Test
-    @DisplayName("Should return true when there is already a registration linked to the meetup.")
-    public void returnTrueWhenMeetupExists() {
-
-        boolean exists = true;
-
-        Page<Meetup> testando = repository.findByRegistrationOnMeetup(
-                String.valueOf(registrationMock),
-                "Data Storytelling – O poder de contar histórias com dados",
-                PageRequest.of(0, 1));
-
-        assertThat(exists).isTrue();
-    }
-
     private Registration createNewRegistration() {
         return Registration.builder()
                 .name("Leticia Campos")

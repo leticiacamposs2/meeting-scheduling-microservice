@@ -1,7 +1,9 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller.resource;
 
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
+import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
+import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -20,17 +22,21 @@ import java.util.stream.Collectors;
 public class RegistrationController {
 
     private RegistrationService registrationService;
-
+    private final MeetupService meetupService;
     private ModelMapper modelMapper;
 
-    public RegistrationController(RegistrationService registrationService, ModelMapper modelMapper) {
+    public RegistrationController(RegistrationService registrationService, MeetupService meetupService, ModelMapper modelMapper) {
         this.registrationService = registrationService;
+        this.meetupService = meetupService;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RegistrationDTO create(@RequestBody @Valid RegistrationDTO dto) {
+
+        Meetup meetup = meetupService.getById(dto.getMeetupId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
 
         Registration entity = modelMapper.map(dto, Registration.class);
         entity = registrationService.save(entity);

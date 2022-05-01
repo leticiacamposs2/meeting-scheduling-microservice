@@ -1,7 +1,7 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
-import com.leticiacampos.meetingschedulingmicroservice.controller.exceptions.ApiErrors;
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.controller.exception.ApiErrors;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;

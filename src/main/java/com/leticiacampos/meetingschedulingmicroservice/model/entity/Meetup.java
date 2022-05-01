@@ -1,5 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.model.entity;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,14 +22,16 @@ public class Meetup {
     @Column
     private String event;
 
-    @JoinColumn(name = "id_registration")
-    @ManyToOne
-    // mtos meetups para 1 registro - registro só pode ir em um meetup
-    private Registration registration;
+    //    @JoinColumn(name = "id_registration")
+    @OneToMany(mappedBy = "meetup", cascade = CascadeType.ALL)
+    private List<Registration> registrations;
 
     @Column
     private String meetupDate;
 
     @Column
     private Boolean registered;
+
+    @Column(name = "owner_id")
+    private Integer ownerId;
 }

@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.6.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'com.microsoft.azure.azurewebapp' version '1.1.0'
+	id 'com.microsoft.azure.azurewebapp' version '1.2.0'
 	id 'java'
 }
 
@@ -48,4 +48,21 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+azurewebapp {
+	subscription = '39c4580d-1ecb-4b08-9139-37507aa90e06'
+	resourceGroup = 'agendamentomeetups-bootcampjava'
+	appName = 'agendamentomeetups'
+	pricingTier = 'P1v2'
+	region = 'Brazil South'
+	runtime {
+		os = 'Windows'
+		webContainer = 'Java SE'
+		javaVersion = 'Java 11'
+	}
+	appSettings {}
+	auth {
+		type = 'azure_cli'
+	}
 }

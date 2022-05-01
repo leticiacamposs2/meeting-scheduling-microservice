@@ -1,9 +1,13 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller.resource;
 
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupFilterDTO;
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
+import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
+import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -13,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,20 +26,30 @@ import java.util.stream.Collectors;
 public class MeetupController {
 
     private final MeetupService meetupService;
+    private final RegistrationService registrationService;
     private final ModelMapper modelMapper;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Page<MeetupDTO> find(MeetupDTO dto, Pageable pageRequest) {
-        Meetup filter = modelMapper.map(dto, Meetup.class);
-        Page<Meetup> result = meetupService.find(filter, pageRequest);
+    public Page<MeetupDTO> find(MeetupFilterDTO dto, Pageable pageRequest) {
+        Page<Meetup> result = meetupService.find(dto, pageRequest);
 
-        List<MeetupDTO> list = result.getContent()
+        List<MeetupDTO> meetups = result
+                .getContent()
                 .stream()
-                .map(entity -> modelMapper.map(entity, MeetupDTO.class))
-                .collect(Collectors.toList());
+                .map(entity -> {
+                    List<Registration> registrations = entity.getRegistrations();
 
-        return new PageImpl<MeetupDTO>(list, pageRequest, result.getTotalElements());
+                    List<RegistrationDTO> registrationDTOS = registrations.stream()
+                            .map(registration -> modelMapper.map(registration, RegistrationDTO.class))
+                            .collect(Collectors.toList());
+
+                    MeetupDTO meetupDTO = modelMapper.map(entity, MeetupDTO.class);
+                    meetupDTO.setRegistrations(registrationDTOS);
+
+                    return meetupDTO;
+                }).collect(Collectors.toList());
+
+        return new PageImpl<MeetupDTO>(meetups, pageRequest, result.getTotalElements());
     }
 
     @GetMapping("/{id}")
@@ -50,11 +63,16 @@ public class MeetupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private MeetupDTO create(@RequestBody @Valid MeetupDTO meetupDTO) {
-        Meetup entity = modelMapper.map(meetupDTO, Meetup.class);
-        entity = meetupService.save(entity);
+    private Integer create(@RequestBody MeetupDTO meetupDTO) {
 
-        return modelMapper.map(entity, MeetupDTO.class);
+        Meetup entity = Meetup.builder()
+                .event(meetupDTO.getEvent())
+                .meetupDate(meetupDTO.getDate().toString())
+                .ownerId(meetupDTO.getOwnerId())
+                .build();
+
+        entity = meetupService.save(entity);
+        return entity.getId();
     }
 
     @PutMapping("{id}")

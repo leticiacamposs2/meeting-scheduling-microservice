@@ -1,7 +1,7 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
 import com.leticiacampos.meetingschedulingmicroservice.controller.resource.RegistrationController;
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;import org.hamcrest.Matchers;

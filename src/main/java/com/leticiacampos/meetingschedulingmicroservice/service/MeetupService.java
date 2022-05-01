@@ -1,5 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.service;
 
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupFilterDTO;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ public interface MeetupService {
 
     Meetup update(Meetup loan);
 
-    Page<Meetup> find(Meetup filter, Pageable pageRequest);
+    Page<Meetup> find(MeetupFilterDTO filterDTO, Pageable pageable);
 
     Page<Meetup> getRegistrationsByMeetup(Registration registration, Pageable pageable);
 

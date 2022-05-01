@@ -1,6 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.service.impl;
 
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.RegistrationRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
@@ -19,7 +19,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     public Registration save(Registration registration) {
-        if (repository.existsByRegistration(registration.getRegistration())) {
+        if (repository.existsByPersonId(registration.getPersonId())) {
             throw new BusinessException("Registration already created");
         }
 
@@ -36,7 +36,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (registration == null || registration.getId() == null) {
             throw new IllegalArgumentException("Registration id cannot be null");
         }
-        this.repository.delete(registration); //delete vem do JPA
+        this.repository.delete(registration);
     }
 
     @Override
@@ -44,22 +44,24 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (registration == null || registration.getId() == null) {
             throw new IllegalArgumentException("Registration id cannot be null");
         }
-        return this.repository.save(registration); //save vem do JPA
+        return this.repository.save(registration);
     }
 
     @Override
     public Page<Registration> find(Registration filter, Pageable pageRequest) {
-        Example<Registration> example = Example.of(filter, ExampleMatcher
-                .matching()
-                .withIgnoreCase()
-                .withIgnoreNullValues()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
+        Example<Registration> example = Example.of(filter,
+                ExampleMatcher
+                        .matching()
+                        .withIgnoreCase()
+                        .withIgnoreNullValues()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
 
         return repository.findAll(example, pageRequest);
     }
 
     @Override
     public Optional<Registration> getRegistrationByRegistrationAttribute(String registrationAttribute) {
-        return repository.findByRegistration(registrationAttribute);
+        return repository.findByPersonId(registrationAttribute);
     }
+
 }

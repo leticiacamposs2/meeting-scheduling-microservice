@@ -15,8 +15,15 @@ public interface MeetupRepository extends JpaRepository<Meetup, Integer> {
     @Transactional
     Integer deleteMeetupById(Integer id);
 
-    @Query(value = "select l from Meetup as l join l.registration as b where b.registration = :registration or l.event =:event")
-    Page<Meetup> findByRegistrationOnMeetup(@Param("registration") String registration, @Param("event") String event, Pageable pageable);
+    @Query( value = " select l from Meetup as l " +
+            "join l.registrations as b " +
+            "where b.personId = :personId " +
+            "or l.event = :event ")
+    Page<Meetup>findByPersonIdOnMeetup(
+            @Param("personId") String personId,
+            @Param("event") String event,
+            Pageable pageable
+    );
 
-    Page<Meetup> findByRegistration(Registration registration, Pageable pageable );
+    Page<Meetup> findByRegistrations(Registration registration, Pageable pageable );
 }

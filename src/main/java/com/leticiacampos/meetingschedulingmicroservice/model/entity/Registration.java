@@ -18,15 +18,18 @@ public class Registration {
     @Id
     @Column(name = "registration_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; //número da inscrição
 
     @Column(name = "person_name")
     private String name;
 
+    @Column(name = "person_id")
+    private String personId;
+
     @Column(name = "date_of_registration")
     private String dateOfRegistration;
 
-    @Column
-    private String registration;
+    @ManyToOne
+    private Meetup meetup;
 
 }

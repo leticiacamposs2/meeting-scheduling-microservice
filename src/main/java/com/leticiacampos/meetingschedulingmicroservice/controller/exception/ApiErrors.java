@@ -1,6 +1,6 @@
-package com.leticiacampos.meetingschedulingmicroservice.controller.exceptions;
+package com.leticiacampos.meetingschedulingmicroservice.controller.exception;
 
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.server.ResponseStatusException;
 

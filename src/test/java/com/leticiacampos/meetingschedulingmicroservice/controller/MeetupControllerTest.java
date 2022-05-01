@@ -1,12 +1,13 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
-import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
 import com.leticiacampos.meetingschedulingmicroservice.controller.resource.MeetupController;
-import com.leticiacampos.meetingschedulingmicroservice.exceptions.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
+import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.service.MeetupService;
 import com.leticiacampos.meetingschedulingmicroservice.service.RegistrationService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,57 +25,49 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Optional;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @WebMvcTest(controllers = {MeetupController.class})
 @AutoConfigureMockMvc
 public class MeetupControllerTest {
 
-    static String MEETUP_API = "/api/meetups";
+    static final String MEETUP_API = "/api/meetups";
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    MeetupService meetupService;
+    private RegistrationService registrationService;
 
     @MockBean
-    RegistrationService registrationService;
+    private MeetupService meetupService;
 
     @Test
     @DisplayName("Should register on a meetup")
     public void createMeetupTest() throws Exception {
 
-        // quando enviar uma requisição pra esse registration precisa ser encontrado um valor que tem esse usuário
+        // quando enviar uma requisicao pra esse registration precisa ser encontrado um valor que tem esse usuario
         MeetupDTO dto = MeetupDTO.builder()
-                .registrationAttribute("123")
                 .event("Womakerscode Dados")
+                .date("20/02/1991")
+                .ownerId(1)
+                .registrations(null)
                 .build();
 
         String json = new ObjectMapper().writeValueAsString(dto);
 
-        Registration registration = Registration.builder()
-                .id(11)
-                .registration("123")
-                .build();
-
-        BDDMockito.given(registrationService.getRegistrationByRegistrationAttribute("123"))
-                .willReturn(Optional.of(registration));
+        Registration registration = Registration.builder().id(11).personId("123").build();
 
         Meetup meetup = Meetup.builder()
                 .id(11)
                 .event("Womakerscode Dados")
-                .registration(registration)
-                .meetupDate("17/04/2022")
+                .registrations(List.of(registration))
+                .meetupDate("10/10/2021")
+                .ownerId(1)
                 .build();
 
-        BDDMockito.given(meetupService.save(Mockito.any(Meetup.class)))
-                .willReturn(meetup);
+        BDDMockito.given(meetupService.save(Mockito.any(Meetup.class))).willReturn(meetup);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(MEETUP_API)
                 .accept(MediaType.APPLICATION_JSON)
@@ -85,29 +78,7 @@ public class MeetupControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(content().string("11"));
-    }
 
-    @Test
-    @DisplayName("Should return error when try to register a meetup nonexistent")
-    public void invalidRegistrationCreateMeetupTest() throws Exception {
-
-        MeetupDTO dto = MeetupDTO.builder()
-                .registrationAttribute("123")
-                .event("Womakerscode Dados")
-                .build();
-
-        String json = new ObjectMapper().writeValueAsString(dto);
-
-        BDDMockito.given(registrationService.getRegistrationByRegistrationAttribute("123"))
-                .willReturn(Optional.empty());
-
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post(MEETUP_API)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json);
-
-        mockMvc.perform(request)
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -115,20 +86,17 @@ public class MeetupControllerTest {
     public void meetupRegistrationErrorOnCreateMeetupTest() throws Exception {
 
         MeetupDTO dto = MeetupDTO.builder()
-                .registrationAttribute("123")
                 .event("Womakerscode Dados")
+                .date("20/02/1991")
+                .ownerId(1)
+                .registrations(null)
                 .build();
-
         String json = new ObjectMapper().writeValueAsString(dto);
 
-        Registration registration = Registration.builder()
-                .id(11)
-                .name("Leticia Campos")
-                .registration("123")
-                .build();
+        // procura na base se ja tem algum registration pra esse meetup
+        BDDMockito.given(meetupService.save(Mockito.any(Meetup.class)))
+                .willThrow(new BusinessException("Meetup already enrolled"));
 
-        // procura na base se já tem algum registration pra esse meetup
-        BDDMockito.given(meetupService.save(Mockito.any(Meetup.class))).willThrow(new BusinessException("Meetup a already enrolled"));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(MEETUP_API)
                 .accept(MediaType.APPLICATION_JSON)
@@ -138,5 +106,4 @@ public class MeetupControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isBadRequest());
     }
-
 }

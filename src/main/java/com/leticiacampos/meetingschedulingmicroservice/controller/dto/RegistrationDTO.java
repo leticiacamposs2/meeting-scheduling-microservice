@@ -1,5 +1,6 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller.dto;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,9 @@ public class RegistrationDTO {
     @NotEmpty
     private String dateOfRegistration;
 
-    @NotEmpty
-    private String registration;
+    @NotNull
+    private Integer personId;
+
+    @NotNull
+    private Integer meetupId;
 }

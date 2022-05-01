@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Integer> {
 
-    boolean existsByRegistration(String registration);
+    boolean existsByPersonId(String personId);
 
-    Optional<Registration> findByRegistration(String registrationAtrb);
+    Optional<Registration> findByPersonId(String personId);
 }
