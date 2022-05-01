@@ -30,10 +30,11 @@ public class RegistrationRepositoryTest {
     public void returnTrueWhenRegistrationExists() {
 
         String registration = "123";
-        Registration registration_attributte = createNewRegistration(registration);
-        entityManager.persist(registration_attributte);
 
-        boolean exists = repository.existsByRegistration(registration);
+        Registration registration_Class_attribute = createNewRegistration(registration);
+        entityManager.persist(registration_Class_attribute);
+
+        boolean exists = repository.existsByPersonId(registration);
 
         assertThat(exists).isTrue();
     }
@@ -44,9 +45,10 @@ public class RegistrationRepositoryTest {
 
         String registration = "123";
 
-        boolean exists = repository.existsByRegistration(registration);
+        boolean exists = repository.existsByPersonId(registration);
 
         assertThat(exists).isFalse();
+
     }
 
     @Test
@@ -60,6 +62,7 @@ public class RegistrationRepositoryTest {
                 .findById(registration_Class_attribute.getId());
 
         assertThat(foundRegistration.isPresent()).isTrue();
+
     }
 
     @Test
@@ -71,11 +74,12 @@ public class RegistrationRepositoryTest {
         Registration savedRegistration = repository.save(registration_Class_attribute);
 
         assertThat(savedRegistration.getId()).isNotNull();
+
     }
 
     @Test
     @DisplayName("Should delete and registration from the base")
-    public void deleteRegistration() {
+    public void deleteRegistation() {
 
         Registration registration_Class_attribute = createNewRegistration("323");
         entityManager.persist(registration_Class_attribute);
@@ -88,13 +92,14 @@ public class RegistrationRepositoryTest {
                 .find(Registration.class, registration_Class_attribute.getId());
 
         assertThat(deleteRegistration).isNull();
+
     }
 
-    private Registration createNewRegistration(String registration) {
+    private Registration createNewRegistration(String personId) {
         return Registration.builder()
                 .name("Leticia Campos")
                 .dateOfRegistration("17/04/2022")
-                .registration(registration)
+                .personId(personId)
                 .build();
     }
 
