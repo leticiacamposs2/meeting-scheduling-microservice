@@ -50,24 +50,11 @@ public class MeetupControllerTest {
     @DisplayName("Should register on a meetup")
     public void createMeetupTest() throws Exception {
 
-        MeetupDTO dto = MeetupDTO.builder()
-                .event("Womakerscode Dados")
-                .date("20/02/1991")
-                .ownerId(1)
-                .registrations(null)
-                .build();
+        MeetupDTO dto = createNewMeetupDTO();
 
         String json = new ObjectMapper().writeValueAsString(dto);
 
-        Registration registration = Registration.builder().id(11).personId("123").build();
-
-        Meetup meetup = Meetup.builder()
-                .id(11)
-                .event("Womakerscode Dados")
-                .registrations(List.of(registration))
-                .meetupDate("10/10/2021")
-                .ownerId(1)
-                .build();
+        Meetup meetup = createNewMeetup();
 
         BDDMockito.given(meetupService.save(Mockito.any(Meetup.class))).willReturn(meetup);
 
@@ -79,7 +66,7 @@ public class MeetupControllerTest {
         // Aqui o que retorna é o id do registro no meetup
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
-                .andExpect(content().string("11"));
+                .andExpect(content().string("1"));
 
     }
 
