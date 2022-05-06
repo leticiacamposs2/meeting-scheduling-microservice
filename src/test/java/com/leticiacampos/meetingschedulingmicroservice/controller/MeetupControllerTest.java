@@ -63,7 +63,6 @@ public class MeetupControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
-        // Aqui o que retorna é o id do registro no meetup
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(content().string("1"));

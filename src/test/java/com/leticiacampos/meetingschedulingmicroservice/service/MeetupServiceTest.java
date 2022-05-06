@@ -117,6 +117,22 @@ public class MeetupServiceTest {
         Mockito.verify(repository, Mockito.times(1)).delete(meetup);
     }
 
+    @Test
+    @DisplayName("Should delete an meetup with invalid id")
+    public void deleteMeetupTestInvalidId() {
+
+        Meetup meetup = Meetup.builder().build();
+
+        Throwable exception = Assertions.catchThrowable(() -> meetupService.delete(1));
+
+        assertThat(exception)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Meetup id cannot be null");
+
+        Mockito.verify(repository, Mockito.never()).delete(meetup);
+    }
+
+
     private Meetup createValidMeetup() {
         return Meetup.builder()
                 .id(101)
