@@ -1,6 +1,5 @@
 package com.leticiacampos.meetingschedulingmicroservice.controller;
 
-import com.leticiacampos.meetingschedulingmicroservice.controller.dto.RegistrationDTO;
 import com.leticiacampos.meetingschedulingmicroservice.controller.resource.MeetupController;
 import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.controller.dto.MeetupDTO;
@@ -100,7 +99,6 @@ public class MeetupControllerTest {
         // procura na base se ja tem algum registration pra esse meetup
         BDDMockito.given(meetupService.save(Mockito.any(Meetup.class)))
                 .willThrow(new BusinessException("Meetup already enrolled"));
-
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(MEETUP_API)
                 .accept(MediaType.APPLICATION_JSON)

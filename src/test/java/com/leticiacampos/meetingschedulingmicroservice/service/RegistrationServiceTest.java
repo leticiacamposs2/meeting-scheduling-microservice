@@ -47,7 +47,7 @@ public class RegistrationServiceTest {
         // cenario
         Registration registration = createValidRegistration();
 
-        // excucao
+        // execucao
         Mockito.when(repository.existsByPersonId(Mockito.anyString())).thenReturn(false);
         Mockito.when(repository.save(registration)).thenReturn(createValidRegistration());
 
