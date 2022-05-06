@@ -2,7 +2,6 @@ package com.leticiacampos.meetingschedulingmicroservice.service;
 
 import com.leticiacampos.meetingschedulingmicroservice.exception.BusinessException;
 import com.leticiacampos.meetingschedulingmicroservice.model.entity.Meetup;
-import com.leticiacampos.meetingschedulingmicroservice.model.entity.Registration;
 import com.leticiacampos.meetingschedulingmicroservice.repository.MeetupRepository;
 import com.leticiacampos.meetingschedulingmicroservice.service.impl.MeetupServiceImpl;
 import org.assertj.core.api.Assertions;
@@ -42,7 +41,7 @@ public class MeetupServiceTest {
         Meetup meetup = createValidMeetup();
 
         // proxima versão validar se o meetup existe
-        Mockito.when(repository.findByMeetupExistent(Mockito.anyString(), Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(repository.findByMeetupExistent(Mockito.anyString(), Mockito.any(), meetup.getOwnerId())).thenReturn(Optional.empty());
         Mockito.when(repository.save(meetup)).thenReturn(createValidMeetup());
 
         Meetup savedMeetup = meetupService.save(meetup);
@@ -132,6 +131,80 @@ public class MeetupServiceTest {
         Mockito.verify(repository, Mockito.never()).delete(meetup);
     }
 
+    @Test
+    @DisplayName("Should update an meetup")
+    public void updateMeetup() {
+
+        // cenario
+        Integer id = 11;
+        Meetup updatingMeetup = createValidMeetup();
+
+        // execucao
+        Meetup updatedMeetup = createValidMeetup();
+
+        updatedMeetup.setId(id);
+        updatedMeetup.setEvent("Experiência 24/7: a importância do UX na construção e manutenção do produto");
+
+        Mockito.when(repository.save(updatingMeetup)).thenReturn(updatedMeetup);
+
+        Meetup meetup = meetupService.update(updatingMeetup);
+
+        // assert
+        assertThat(meetup.getId()).isEqualTo(updatedMeetup.getId());
+        assertThat(meetup.getEvent()).isEqualTo(meetup.getEvent());
+        assertThat(meetup.getMeetupDate()).isEqualTo(meetup.getMeetupDate());
+        assertThat(meetup.getOwnerId()).isEqualTo(meetup.getOwnerId());
+    }
+
+    @Test
+    @DisplayName("Should update an meetup with invalid id")
+    public void updateMeetupTestInvalidId() {
+
+        Meetup meetup = Meetup.builder().build();
+
+        Throwable exception = Assertions.catchThrowable(() -> meetupService.update(meetup));
+
+        assertThat(exception)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Meetup id cannot be null");
+
+        Mockito.verify(repository, Mockito.never()).save(meetup);
+    }
+
+    @Test
+    @DisplayName("Should check if the meetup already exists")
+    public void getRegisteredMeetup() {
+
+        // cenario
+        Meetup meetup = createValidMeetup();
+
+        // execucao
+        Mockito.when(repository.findByMeetupExistent(
+                meetup.getEvent(),
+                meetup.getMeetupDate(),
+                meetup.getOwnerId())).thenReturn(Optional.of(
+                Meetup.builder()
+                        .id(101)
+                        .event("Experiência 24/7: a importância do UX na construção e manutenção do produto")
+                        .meetupDate("05/05/2022")
+                        .ownerId(3)
+                        .build()
+                ));
+
+        Optional<Meetup> meetupExistent = meetupService.getById(11);
+
+        // assert
+        assertThat(meetup.getId()).isEqualTo(meetup.getId());
+        assertThat(meetup.getEvent()).isEqualTo(meetup.getEvent());
+        assertThat(meetup.getMeetupDate()).isEqualTo(meetup.getMeetupDate());
+        assertThat(meetup.getOwnerId()).isEqualTo(meetup.getOwnerId());
+
+        Mockito.verify(repository, Mockito.times(1)).findByMeetupExistent(
+                meetup.getEvent(),
+                meetup.getMeetupDate(),
+                meetup.getOwnerId());
+
+    }
 
     private Meetup createValidMeetup() {
         return Meetup.builder()

@@ -30,8 +30,8 @@ public interface MeetupRepository extends JpaRepository<Meetup, Integer> {
             "where l.event = :event and l.meetupDate = :meetupDate ")
     Optional<Meetup> findByMeetupExistent(
             @Param("event") String event,
-            @Param("meetupDate") String meetupDate
-    );
+            @Param("meetupDate") String meetupDate,
+            Integer ownerId);
 
     Page<Meetup> findByRegistrations(Registration registration, Pageable pageable );
 }
