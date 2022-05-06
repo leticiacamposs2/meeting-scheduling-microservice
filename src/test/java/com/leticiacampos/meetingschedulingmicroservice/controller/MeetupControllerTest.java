@@ -87,12 +87,7 @@ public class MeetupControllerTest {
     @DisplayName("Should return error when try to register a registration already register on a meetup")
     public void meetupRegistrationErrorOnCreateMeetupTest() throws Exception {
 
-        MeetupDTO dto = MeetupDTO.builder()
-                .event("Womakerscode Dados")
-                .date("20/02/1991")
-                .ownerId(1)
-                .registrations(null)
-                .build();
+        MeetupDTO dto = createNewMeetupDTO();
 
         String json = new ObjectMapper().writeValueAsString(dto);
 
@@ -127,7 +122,6 @@ public class MeetupControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(id))
                 .andExpect(jsonPath("event").value(createNewMeetup().getEvent()))
                 .andExpect(jsonPath("meetupDate").value(createNewMeetup().getMeetupDate()))
                 .andExpect(jsonPath("ownerId").value(createNewMeetup().getOwnerId()))
@@ -136,8 +130,18 @@ public class MeetupControllerTest {
 
     private Meetup createNewMeetup() {
         return Meetup.builder()
+                .id(1)
                 .event("Womakerscode Dados")
                 .meetupDate("20/02/1991")
+                .ownerId(1)
+                .registrations(null)
+                .build();
+    }
+
+    private MeetupDTO createNewMeetupDTO() {
+        return MeetupDTO.builder()
+                .event("Womakerscode Dados")
+                .date("20/02/1991")
                 .ownerId(1)
                 .registrations(null)
                 .build();

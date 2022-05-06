@@ -62,7 +62,5 @@ azurewebapp {
 		javaVersion = 'Java 11'
 	}
 	appSettings {}
-	auth {
-		type = 'azure_cli'
-	}
+	auth {}
 }
